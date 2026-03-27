@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom styles for AI Notes */
+.prose h1, .prose h2, .prose h3 {
+  color: #0A1172; /* Deep Blue for main headings */
+}
+
+.prose strong, .prose b {
+  color: #006400; /* Dark Green for sub-headings (bold text) */
+}
+
+.prose mark {
+  background-color: #FFFFE0; /* Light Yellow for key terms */
+  padding: 0.2em 0.4em;
+  border-radius: 0.2em;
+}

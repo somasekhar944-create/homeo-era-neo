@@ -1,0 +1,241 @@
+[
+  {
+    "week": 1,
+    "materia_medica": ["Aconite", "Belladonna"],
+    "organon": "Aphorisms 1-20 (Mission and Highest Ideal of Cure)",
+    "allied_subjects": {
+      "pharmacy": "Introduction and Sources of Drugs",
+      "anatomy": "General Introduction to Anatomy"
+    },
+    "keywords": ["Aconite", "Belladonna", "Aphorism 1", "Ideal Cure", "Drug Sources"]
+  },
+  {
+    "week": 2,
+    "materia_medica": ["Calc-Carb", "Calc-Phos"],
+    "organon": "Aphorisms 21-40 (Nature's Law and Therapeutic Law)",
+    "allied_subjects": {
+      "pharmacy": "Potentization and Trituration",
+      "anatomy": "Lower Limb Bones"
+    },
+    "keywords": ["Calcarea", "Nature Law", "Potentization", "Lower Limb"]
+  },
+  {
+    "week": 3,
+    "materia_medica": ["Hepar Sulph", "Lycopodium"],
+    "organon": "Aphorisms 105-145 (Drug Proving)",
+    "allied_subjects": {
+      "repertory": "History of Repertory",
+      "anatomy": "Abdominal Wall",
+      "biochemistry": "Carbohydrate Metabolism"
+    },
+    "keywords": ["Hepar Sulph", "Lycopodium", "Drug Proving", "Abdomen"]
+  },
+  {
+    "week": 4,
+    "materia_medica": ["Lachesis", "Snake Venoms"],
+    "organon": "Aphorisms 146-291 (Classification of Diseases)",
+    "allied_subjects": {
+      "pharmacy": "Posology",
+      "anatomy": "Upper Limb Nerves"
+    },
+    "keywords": ["Lachesis", "Snake Venoms", "Posology", "Nerves"]
+  },
+  {
+    "week": 5,
+    "materia_medica": ["Calcarea Group (Revision)"],
+    "organon": "Aphorisms 61-80 (Primary and Secondary Actions)",
+    "allied_subjects": {
+      "anatomy": "Lower Limb Muscles",
+      "physiology": "Respiratory System"
+    },
+    "keywords": ["Calcarea", "Primary Action", "Secondary Action", "Respiration"]
+  },
+  {
+    "week": 6,
+    "materia_medica": ["Chamomilla", "Cina"],
+    "organon": "Aphorisms 81-104 (Case Taking)",
+    "allied_subjects": {
+      "pharmacy": "Trituration and Succussion",
+      "physiology": "Digestion"
+    },
+    "keywords": ["Chamomilla", "Cina", "Case Taking", "Digestion"]
+  },
+  {
+    "week": 7,
+    "materia_medica": ["Colocynth", "Conium"],
+    "organon": "Chronic Miasms Introduction",
+    "allied_subjects": {
+      "anatomy": "Sciatic Nerve",
+      "physiology": "Liver and Pancreas"
+    },
+    "keywords": ["Colocynth", "Conium", "Miasms", "Liver"]
+  },
+  {
+    "week": 8,
+    "materia_medica": ["Dulcamara", "Digitalis"],
+    "organon": "Chronic Diseases - Psora",
+    "allied_subjects": {
+      "pharmacy": "Prescription Writing",
+      "anatomy": "Thorax"
+    },
+    "keywords": ["Dulcamara", "Digitalis", "Psora", "Thorax"]
+  },
+  {
+    "week": 9,
+    "materia_medica": ["Ferrum Met", "Gelsemium"],
+    "organon": "Drug Proving (Advanced)",
+    "allied_subjects": {
+      "repertory": "Kent's Philosophy",
+      "physiology": "Kidney and Urine Formation"
+    },
+    "keywords": ["Ferrum Met", "Gelsemium", "Kent Philosophy", "Kidney"]
+  },
+  {
+    "week": 10,
+    "materia_medica": ["Hyoscyamus", "Stramonium"],
+    "organon": "Case Taking in Chronic Diseases",
+    "allied_subjects": {
+      "repertory": "Kent's Repertory Plan and Structure",
+      "anatomy": "Stomach and Intestines"
+    },
+    "keywords": ["Hyoscyamus", "Stramonium", "Kent Repertory", "Stomach"]
+  },
+  {
+    "week": 11,
+    "materia_medica": ["Ipecac", "Ignatia"],
+    "organon": "One-sided Diseases",
+    "allied_subjects": {
+      "pathology": "Cell Injury",
+      "anatomy": "Brain (Cerebrum)"
+    },
+    "keywords": ["Ipecac", "Ignatia", "One-sided Diseases", "Cell Injury"]
+  },
+  {
+    "week": 12,
+    "materia_medica": ["Kali-Carb", "Kali-Bich"],
+    "organon": "Mental Diseases",
+    "allied_subjects": {
+      "repertory": "TPB (Boenninghausen) Philosophy",
+      "physiology": "Endocrine Glands"
+    },
+    "keywords": ["Kali-Carb", "Kali-Bich", "Mental Diseases", "TPB"]
+  },
+  {
+    "week": 13,
+    "materia_medica": ["Natrum Mur", "Natrum Sulph"],
+    "organon": "Intermittent Diseases",
+    "allied_subjects": {
+      "pathology": "Inflammation",
+      "anatomy": "Head and Neck"
+    },
+    "keywords": ["Nat-Mur", "Nat-Sulph", "Intermittent", "Inflammation"]
+  },
+  {
+    "week": 14,
+    "materia_medica": ["Nux Vomica", "Nitric Acid"],
+    "organon": "Administration of Remedies",
+    "allied_subjects": {
+      "repertory": "BBCR Philosophy",
+      "fmt": "Courts and Evidence"
+    },
+    "keywords": ["Nux Vomica", "Nitric Acid", "BBCR", "Courts"]
+  },
+  {
+    "week": 15,
+    "materia_medica": ["Phosphorus", "Pulsatilla"],
+    "organon": "Posology and LM Scale",
+    "allied_subjects": {
+      "pathology": "Neoplasia (Cancer)",
+      "anatomy": "Cranial Nerves"
+    },
+    "keywords": ["Phosphorus", "Pulsatilla", "LM Scale", "Cancer"]
+  },
+  {
+    "week": 16,
+    "materia_medica": ["Rhus Tox", "Ruta"],
+    "organon": "Kent's 12 Observations",
+    "allied_subjects": {
+      "fmt": "Identification",
+      "surgery": "Wounds and Ulcers"
+    },
+    "keywords": ["Rhus Tox", "Ruta", "Kent Observations", "Ulcers"]
+  },
+  {
+    "week": 17,
+    "materia_medica": ["Sepia", "Silicea"],
+    "organon": "Syphilitic and Sycotic Miasms",
+    "allied_subjects": {
+      "surgery": "Burns and Shock",
+      "obg": "Menstrual Cycle"
+    },
+    "keywords": ["Sepia", "Silicea", "Syphilis", "Menstrual Cycle"]
+  },
+  {
+    "week": 18,
+    "materia_medica": ["Sulphur", "Thuja"],
+    "organon": "Hering’s Law of Cure",
+    "allied_subjects": {
+      "obg": "Fertilization",
+      "surgery": "Surgical Infections"
+    },
+    "keywords": ["Sulphur", "Thuja", "Hering Law", "Fertilization"]
+  },
+  {
+    "week": 19,
+    "materia_medica": ["Arsenic Alb", "Apis Mel"],
+    "organon": "Lesser Writings of Hahnemann",
+    "allied_subjects": {
+      "obg": "Pregnancy",
+      "surgery": "Hemorrhage",
+      "medicine": "Homeopathic Therapeutics of GI Disorders"
+    },
+    "keywords": ["Arsenic Alb", "Apis Mel", "Pregnancy", "Hemorrhage"]
+  },
+  {
+    "week": 20,
+    "materia_medica": ["Baryta Carb", "Bryonia"],
+    "organon": "Chronic Diseases (Advanced)",
+    "allied_subjects": {
+      "spm": "Intro and Immunity",
+      "surgery": "Tumors and Cysts"
+    },
+    "keywords": ["Baryta Carb", "Bryonia", "Immunity", "Tumors"]
+  },
+  {
+    "week": 21,
+    "materia_medica": ["Graphites", "Merc-Sol"],
+    "organon": "Revision of Aphorisms 1-100",
+    "allied_subjects": {
+      "obg": "Labour and Complications",
+      "parasitology": "Protozoa and Helminths"
+    },
+    "keywords": ["Graphites", "Merc-Sol", "Aphorism Revision", "Labour"]
+  },
+  {
+    "week": 22,
+    "materia_medica": ["Opium", "Platinum"],
+    "organon": "Revision of Aphorisms 101-291",
+    "allied_subjects": {
+      "surgery": "Systemic Surgery"
+    },
+    "keywords": ["Opium", "Platinum", "Revision", "Surgery"]
+  },
+  {
+    "week": 23,
+    "materia_medica": ["Mock Test 1"],
+    "organon": "Materia Medica Grand Test",
+    "allied_subjects": {
+      "all": "All Allied Subjects Revision"
+    },
+    "keywords": ["Mock Test", "Full Syllabus"]
+  },
+  {
+    "week": 24,
+    "materia_medica": ["Grand Mock Test"],
+    "organon": "200 Question Full Paper",
+    "allied_subjects": {
+      "aiapget": "Previous Year Paper (2024/2025)"
+    },
+    "keywords": ["Grand Mock", "Final Exam"]
+  }
+]
