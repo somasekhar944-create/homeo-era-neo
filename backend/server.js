@@ -37,7 +37,7 @@ mongoose.connect(process.env.MONGO_URI, { family: 4 })
 .then(() => console.log("✅ Database Connected"))
 .catch(err => console.error("❌ DB Error:", err));
 
-// Routes
+// API Routes (Mounted Above 404 Handler)
 app.get("/api/test", (req, res) => res.json({ status: "OK" }));
 app.use("/api/training", trainingRoutes);
 app.use("/api/quiz", quizRoutes);
@@ -45,10 +45,10 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/users", userRoutes);
 
-// 404 Handler for API - Ensure compatibility with Express 5 / path-to-regexp
-app.use("/api", (req, res) => {
-  console.log("404 at API:", req.method, req.originalUrl);
-  res.status(404).json({ message: `API Route not found: ${req.originalUrl}` });
+// Catch-All 404 Handler (Placed after all routes)
+app.use((req, res) => {
+  console.log("404 Error at:", req.method, req.originalUrl);
+  res.status(404).json({ message: `Route ${req.originalUrl} not found` });
 });
 
 app.listen(PORT, "0.0.0.0", () => console.log(`Server live on ${PORT}`));
