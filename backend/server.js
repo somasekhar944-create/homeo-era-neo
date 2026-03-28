@@ -45,8 +45,8 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/users", userRoutes);
 
-// 404 Handler for API
-app.use("/api/*", (req, res) => {
+// 404 Handler for API - Ensure compatibility with Express 5 / path-to-regexp
+app.use("/api", (req, res) => {
   console.log("404 at API:", req.method, req.originalUrl);
   res.status(404).json({ message: `API Route not found: ${req.originalUrl}` });
 });
