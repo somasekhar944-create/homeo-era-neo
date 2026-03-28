@@ -14,7 +14,7 @@ const notesRoutes = require("./services/notesGenerator/notesRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const app = express();
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 8080;
 
 // Request Logging
 app.use((req, res, next) => {
