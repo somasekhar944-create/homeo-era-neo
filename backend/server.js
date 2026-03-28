@@ -45,4 +45,4 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/users", userRoutes);
 
-app.listen(PORT, () => console.log(`Server live on ${PORT}`));
+app.listen(PORT, "0.0.0.0", () => console.log(`Server live on ${PORT}`));
