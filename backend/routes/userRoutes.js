@@ -165,14 +165,13 @@ router.put("/:id/role", async (req, res) => { // isAdmin temporarily removed for
 });
 
 // DELETE user
-router.delete("/:id", async (req, res) => { // isAdmin temporarily removed for testing
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
   console.log("DELETE /api/users/:id request received in userRoutes.");
   console.log("Attempting to delete user with ID:", id);
   try {
-    const { id } = req.params;
     await User.findByIdAndDelete(id);
     console.log(`User ${id} deleted from DB.`);
-    console.log(`Remaining users count after deletion (approximate): ${await User.countDocuments({})}`);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Error deleting user in userRoutes:", error);
