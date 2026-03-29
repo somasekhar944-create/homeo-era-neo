@@ -78,21 +78,16 @@ router.post("/login", async (req, res) => {
   try {
     const { phone, password } = req.body;
     
-    // Find user by phone OR email (flexible login)
-    const user = await User.findOne({ 
-      $or: [
-        { phone: phone },
-        { email: phone }
-      ] 
-    });
+    // Find user by phone number ONLY (reverted from email support)
+    const user = await User.findOne({ phone });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid mobile number/email or password." });
+      return res.status(400).json({ message: "Invalid mobile number or password." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid mobile number/email or password." });
+      return res.status(400).json({ message: "Invalid mobile number or password." });
     }
 
     // Create JWT
