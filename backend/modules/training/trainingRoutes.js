@@ -12,9 +12,9 @@ const API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 let model = null;
 if (API_KEY && API_KEY !== "your_gemini_api_key_here") {
   const genAI = new GoogleGenerativeAI(API_KEY);
-  // Reverted/Locked to gemini-1.5-flash as per standard availability
-  model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-  console.log("✅ Training Controller: Gemini 1.5 Flash Model Locked.");
+  // Reverted/Locked to gemini-2.5-flash as per user command
+  model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+  console.log("✅ Training Controller: Gemini 2.5 Flash Model Locked.");
 } else {
   console.error("❌ Training Controller: API_KEY missing.");
 }
