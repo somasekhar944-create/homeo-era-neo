@@ -16,7 +16,9 @@ function HomePage() {
   const navigate = useNavigate();
 
   // Get dynamic name from localStorage
-  const studentName = localStorage.getItem('userName') || "Somasekhar";
+  const userStr = localStorage.getItem('user');
+  const user = userStr ? JSON.parse(userStr) : null;
+  const studentName = user?.name || "";
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem('token');
@@ -84,7 +86,7 @@ function HomePage() {
               </span>
             </h1>
             <p className="text-xl text-slate-500 font-bold flex items-center gap-2">
-              Welcome back, <span className="text-indigo-600">Dr. {studentName}</span>!
+              Welcome back, <span className="text-indigo-600">{studentName ? `Dr. ${studentName}` : "Doctor"}</span>!
             </p>
           </div>
         </div>
