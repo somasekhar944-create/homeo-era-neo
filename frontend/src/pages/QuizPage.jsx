@@ -81,7 +81,7 @@ function QuizPage() {
         }
       }
 
-      const response = await fetch(`import.meta.env.VITE_API_URL/api/training/exam/${weekNumber}`, { headers });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/training/exam/${weekNumber}`, { headers });
       if (!response.ok) throw new Error("Failed to fetch exam questions.");
       const examData = await response.json();
       

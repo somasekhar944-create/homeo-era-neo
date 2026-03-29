@@ -36,7 +36,7 @@ function WeeklyAssessmentResult() {
     try {
       setLoadingExplanations(prev => ({ ...prev, [questionId]: true }));
       const token = localStorage.getItem('token');
-      const response = await fetch(`import.meta.env.VITE_API_URL/api/training/explanation/${questionId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/training/explanation/${questionId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -66,7 +66,7 @@ function WeeklyAssessmentResult() {
       setError(null);
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`import.meta.env.VITE_API_URL/api/training/results/${examId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/training/results/${examId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) {

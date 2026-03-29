@@ -37,7 +37,7 @@ function RevisionVaultPage() {
   const removeBookmark = async (questionId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`import.meta.env.VITE_API_URL/api/user/vault/${questionId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/vault/${questionId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -79,7 +79,7 @@ function RevisionVaultPage() {
     try {
       setLoadingExplanations(prev => ({ ...prev, [questionId]: true }));
       const token = localStorage.getItem('token');
-      const response = await fetch(`import.meta.env.VITE_API_URL/api/training/explanation/${questionId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/training/explanation/${questionId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();

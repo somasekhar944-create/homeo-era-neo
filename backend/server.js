@@ -14,7 +14,7 @@ const notesRoutes = require("./services/notesGenerator/notesRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = Number(process.env.PORT) || 10000;
 
 // Request Logging
 app.use((req, res, next) => {
@@ -51,4 +51,4 @@ app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.originalUrl} not found` });
 });
 
-app.listen(PORT, "0.0.0.0", () => console.log(`Server live on ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log('Server live on ' + PORT));

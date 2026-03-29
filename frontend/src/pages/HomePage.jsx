@@ -31,7 +31,7 @@ function HomePage() {
         
         // Fetch initial leaderboard (weekly for the current week found in performance)
         const currentWeek = perfRes.data.currentWeek || 1;
-        const leaderRes = await axios.get(`import.meta.env.VITE_API_URL/api/analytics/leaderboard/${currentWeek}`, getAuthHeaders());
+        const leaderRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/analytics/leaderboard/${currentWeek}`, getAuthHeaders());
         setLeaderboard(leaderRes.data);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
@@ -46,7 +46,7 @@ function HomePage() {
     setLeaderboardType(type);
     try {
       const url = type === 'weekly' 
-        ? `import.meta.env.VITE_API_URL/api/analytics/leaderboard/${performance?.currentWeek || 1}`
+        ? `${import.meta.env.VITE_API_URL}/api/analytics/leaderboard/${performance?.currentWeek || 1}`
         : `${import.meta.env.VITE_API_URL}/api/analytics/leaderboard-monthly`;
       const res = await axios.get(url, getAuthHeaders());
       setLeaderboard(res.data);

@@ -15,7 +15,7 @@ function UserManagementPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`import.meta.env.VITE_API_URL/api/users?search=${searchTerm}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users?search=${searchTerm}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -43,7 +43,7 @@ function UserManagementPage() {
     if (!window.confirm(`Are you sure you want to change user role to ${newRole}?`)) return;
 
     try {
-      const response = await fetch(`import.meta.env.VITE_API_URL/api/users/${userId}/role`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${userId}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function UserManagementPage() {
     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
 
     try {
-      const response = await fetch(`import.meta.env.VITE_API_URL/api/users/${userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'x-admin-token': 'supersecretadmin',
