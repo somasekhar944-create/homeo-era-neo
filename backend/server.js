@@ -34,7 +34,22 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, { family: 4 })
-.then(() => console.log("✅ Database Connected"))
+.then(async () => {
+  console.log("✅ Database Connected");
+  
+  // Auto-Seed Syllabus if empty
+  const { Syllabus } = require("./modules/training/models");
+  const syllabusCount = await Syllabus.countDocuments();
+  if (syllabusCount === 0) {
+    console.log("Empty Syllabus detected. Auto-seeding...");
+    const syllabusPath = path.join(__dirname, "modules/training/data/pg exam syllubs.json");
+    if (fs.existsSync(syllabusPath)) {
+      const syllabusData = JSON.parse(fs.readFileSync(syllabusPath, "utf8"));
+      await Syllabus.insertMany(syllabusData);
+      console.log(`✅ Successfully auto-seeded ${syllabusData.length} syllabus entries.`);
+    }
+  }
+})
 .catch(err => console.error("❌ DB Error:", err));
 
 // API Routes (Mounted Above 404 Handler)

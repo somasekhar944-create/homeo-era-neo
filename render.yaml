@@ -16,7 +16,7 @@ services:
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_API_URL
-        value: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+        value: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
       - key: FRONTEND_URL
         sync: false
       - key: SESSION_SECRET
