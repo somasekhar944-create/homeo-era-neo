@@ -77,15 +77,22 @@ router.post("/verify-otp", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { phone, password } = req.body;
-    const user = await User.findOne({ phone });
+    
+    // Find user by phone OR email (flexible login)
+    const user = await User.findOne({ 
+      $or: [
+        { phone: phone },
+        { email: phone }
+      ] 
+    });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid mobile number or password." });
+      return res.status(400).json({ message: "Invalid mobile number/email or password." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid mobile number or password." });
+      return res.status(400).json({ message: "Invalid mobile number/email or password." });
     }
 
     // Create JWT
