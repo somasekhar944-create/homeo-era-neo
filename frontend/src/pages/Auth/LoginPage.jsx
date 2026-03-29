@@ -50,14 +50,14 @@ function LoginPage({ setUser }) {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Mobile Number</label>
+            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Mobile Number / Email</label>
             <input
               type="text"
               className="w-full bg-slate-50 border-2 border-slate-100 p-4 rounded-2xl font-bold focus:ring-4 focus:ring-indigo-100 focus:border-indigo-600 outline-none transition-all"
               value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+              onChange={(e) => setPhone(e.target.value)}
               required
-              placeholder="10-digit mobile number"
+              placeholder="Mobile or Email"
             />
           </div>
           <div>
