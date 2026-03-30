@@ -24,8 +24,10 @@ app.use((req, res, next) => {
 });
 
 // Middleware
-const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL].filter(Boolean);
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(cors({
+  origin: 'https://homeo-era-neo.vercel.app',
+  credentials: true
+}));
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", "default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'");
   next();
