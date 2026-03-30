@@ -41,7 +41,7 @@ mongoose.connect(process.env.MONGO_URI, { family: 4 })
   console.log("✅ Database Connected");
   
   // Auto-Seed Syllabus if empty
-  const { Syllabus } = require("./modules/training/models");
+  const { Syllabus, PreviousYearQuestion } = require("./modules/training/models");
   const syllabusCount = await Syllabus.countDocuments();
   if (syllabusCount === 0) {
     console.log("Empty Syllabus detected. Auto-seeding...");
@@ -50,6 +50,26 @@ mongoose.connect(process.env.MONGO_URI, { family: 4 })
       const syllabusData = JSON.parse(fs.readFileSync(syllabusPath, "utf8"));
       await Syllabus.insertMany(syllabusData);
       console.log(`✅ Successfully auto-seeded ${syllabusData.length} syllabus entries.`);
+    }
+  }
+
+  // Auto-Seed PYQs if empty (Crucial for Week 1 exam)
+  const pyqCount = await PreviousYearQuestion.countDocuments();
+  if (pyqCount === 0) {
+    console.log("Empty PYQ collection detected. Auto-seeding...");
+    const pyqPath = path.join(__dirname, "modules/training/data/Previous Year Questions.json");
+    if (fs.existsSync(pyqPath)) {
+      const pyqData = JSON.parse(fs.readFileSync(pyqPath, "utf8"));
+      const processedData = pyqData.map(q => {
+        let week = 0;
+        if (q.id && typeof q.id === 'string') {
+          const match = q.id.match(/^w(\d+)/);
+          if (match) week = parseInt(match[1], 10);
+        }
+        return { ...q, week: q.week || week };
+      });
+      await PreviousYearQuestion.insertMany(processedData);
+      console.log(`✅ Successfully auto-seeded ${processedData.length} questions.`);
     }
   }
 })

@@ -36,7 +36,12 @@ const shuffleArray = (array) => {
 // GET /api/training/exam/:weekNumber - PG Training Hybrid Logic (50/100)
 router.get("/exam/:weekNumber", auth, async (req, res) => {
   try {
-    const weekNumber = parseInt(req.params.weekNumber, 10);
+    let { weekNumber } = req.params;
+    // Support both "1" and "week-1" format for flexibility
+    if (typeof weekNumber === 'string' && weekNumber.startsWith('week-')) {
+      weekNumber = weekNumber.replace('week-', '');
+    }
+    weekNumber = parseInt(weekNumber, 10);
     const userId = req.user.id;
 
     if (isNaN(weekNumber) || weekNumber < 1 || weekNumber > 24) {
@@ -63,6 +68,22 @@ router.get("/exam/:weekNumber", auth, async (req, res) => {
         weekNumber,
         syllabusCovered: `Weeks 1 to ${weekNumber}`
       });
+    }
+
+    // --- NEW: Static File Fallback for Week 1 (as per user request) ---
+    if (weekNumber === 1 && !isMonthlyMock) {
+      console.log("Week 1 exam requested. Attempting to load static file...");
+      const staticExamPath = path.join(__dirname, "data/Week 1.json");
+      if (fs.existsSync(staticExamPath)) {
+        const staticExamData = JSON.parse(fs.readFileSync(staticExamPath, "utf8"));
+        return res.status(200).json({
+          examQuestions: staticExamData,
+          isMonthlyMock: false,
+          totalQuestions: staticExamData.length,
+          timeLimit: 60,
+          weekNumber: 1
+        });
+      }
     }
 
     // Clear incomplete
