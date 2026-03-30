@@ -78,23 +78,42 @@ router.post("/login", async (req, res) => {
   try {
     const { phone, password } = req.body;
     
-    // Find user by phone number ONLY (reverted from email support)
-    const user = await User.findOne({ phone });
+    console.log("Login attempt for phone:", phone);
+
+    // Basic 10-digit validation check (relaxed)
+    if (!phone || phone.length < 10) {
+      return res.status(400).json({ message: "Please enter a valid 10-digit mobile number." });
+    }
+
+    // Find user by phone number ONLY
+    const user = await User.findOne({ phone: phone.trim() });
 
     if (!user) {
+      console.log("User not found for phone:", phone);
       return res.status(400).json({ message: "Invalid mobile number or password." });
     }
 
+    console.log("User found, comparing passwords...");
+
+    // Compare provided password with hashed password in DB
     const isMatch = await bcrypt.compare(password, user.password);
+    
     if (!isMatch) {
+      console.log("Password mismatch for phone:", phone);
       return res.status(400).json({ message: "Invalid mobile number or password." });
     }
+
+    console.log("Login successful for:", phone);
 
     // Create JWT
     const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "7d" });
 
-    res.status(200).json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, phone: user.phone } });
+    res.status(200).json({ 
+      token, 
+      user: { id: user._id, name: user.name, email: user.email, role: user.role, phone: user.phone } 
+    });
   } catch (err) {
+    console.error("Critical Login Error:", err.message);
     res.status(500).json({ message: "Login error", error: err.message });
   }
 });
