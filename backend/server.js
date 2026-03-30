@@ -58,6 +58,7 @@ app.get("/api/test", (req, res) => res.json({ status: "OK" }));
 app.use("/api/training", trainingRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/user", analyticsRoutes); // Support /api/user/profile and other user-specific routes
 app.use("/api/notes", notesRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/books", bookRoutes);

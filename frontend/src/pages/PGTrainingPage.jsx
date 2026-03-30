@@ -197,10 +197,12 @@ function PGTrainingPage() {
             const isCompleted = completedWeeks.includes(item.week);
             
             // Final Logic: Locked if not scheduled OR date is in the future (Admin bypass)
-            let isLocked = user.role === 'admin' ? false : (!unlockDate || new Date() < new Date(unlockDate));
+            // Including phone number check as requested by the user
+            const isAdmin = user.role === 'admin' || user.phone === '9493649788';
+            let isLocked = isAdmin ? false : (!unlockDate || new Date() < new Date(unlockDate));
             
             // Allow review for completed weeks even for students
-            if (user.role !== 'admin' && isCompleted) isLocked = false;
+            if (!isAdmin && isCompleted) isLocked = false;
 
             console.log(`Week ${item.week} - Role: ${user.role}, Today:`, new Date(), 'UnlockDate:', unlockDate, 'Is Locked:', isLocked);
 
