@@ -12,6 +12,7 @@ const quizRoutes = require("./modules/quiz/quizRoutes");
 const analyticsRoutes = require("./modules/analytics/analyticsRoutes");
 const notesRoutes = require("./services/notesGenerator/notesRoutes");
 const userRoutes = require("./routes/userRoutes");
+const bookRoutes = require("./routes/bookRoutes");
 
 const app = express();
 const PORT = Number(process.env.PORT) || 10000;
@@ -59,6 +60,7 @@ app.use("/api/quiz", quizRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/books", bookRoutes);
 
 // Catch-All 404 Handler (Placed after all routes)
 app.use((req, res) => {

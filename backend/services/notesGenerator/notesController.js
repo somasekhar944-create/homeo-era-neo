@@ -56,49 +56,22 @@ exports.generateNotes = async (req, res) => {
             case 'MATERIAMEDICA':
                 systemPrompt = `
                     ***STRICT MATERIA MEDICA RULES (EXAM-TOPPER STYLE):***
-                    ***EVERY MATERIA MEDICA AI GENERATED NOTE MUST STRICTLY ADHERE TO THESE RULES AND THE PROVIDED STRUCTURE WITH COMPLETE CONTENT. VIOLATIONS WILL RESULT IN AN INVALID RESPONSE.***
+                    Return ONLY a JSON array of objects. Each object must have:
+                    "title": "Section Title (e.g., DRUG PROFILE, MNEMONIC, etc.)",
+                    "content": "Markdown content for this section"
+
                     1. **SOURCE LOCK:** Strictly use information ONLY from the '${MM_SOURCE_FILE}' Materia Medica for all queries.
-                    2. **TEMPLATE LOCK:** Every note MUST strictly follow this order and provide content for each section:
+                    2. **TEMPLATE LOCK:** Every note MUST strictly follow this order:
                        - **I. DRUG PROFILE:** (Synonyms, Family, Sphere, Thermal, Miasm)
                        - **II. MNEMONIC:** (A concise and relevant catchy code)
                        - **III. KEY INDICATIONS:** (Bullet points only)
                        - **IV. MODALITIES:** (Aggravation, Amelioration - one line each)
                        - **V. RELATIONS & COMPARISONS:** (Bullet points only, NO TABLES)
                     3. **ZERO ANATOMY:** You are STRICTLY FORBIDDEN from mentioning: Vagus, Detrusor, Metabolism, Nerve supply, Vertebrae. If any forbidden word is used, output "INVALID RESPONSE: FORBIDDEN WORD DETECTED." and nothing else.
-                    4. **NO LONG PARAGRAPHS:** All descriptions and indications MUST be in concise bullet points or short sentences. No single block of text (including bullet points) should exceed 2 lines.
+                    4. **NO LONG PARAGRAPHS:** All descriptions and indications MUST be in concise bullet points.
                     5. **NO INTRO/CONCLUSION:** Do not add "Introduction" or "Conclusion" sections.
-                    6. **Strict Formatting:** Only use Markdown Headings (e.g., #, ##), Bullet Points (e.g., *, -), and **Bold** text. Absolutely NO code blocks, NO JSON-like structures, and NO flowcharts or visual diagrams.
-
-                    # ${topic} - ${marks} Marks
-
-                    ## I. DRUG PROFILE:
-                    * **Synonyms:** [e.g., "Arsenic Trioxide, Arsenious Acid"]
-                    * **Family:** [e.g., "Mineral Kingdom"]
-                    * **Sphere:** [e.g., "Mucous membranes, G.I. Tract, Respiratory system, Heart, Mind"]
-                    * **Thermal:** [e.g., "Very Chilly (except head symptoms)"]
-                    * **Miasm:** [e.g., "Psora, Syphilis"]
-
-                    ## II. MNEMONIC:
-                    * "[Generate a concise and relevant catchy code, e.g., \"3A\`s - Anxiety, Agony, Adynamia (Prostration)\" for Arsenicum Album.]"
-
-                    ## III. KEY INDICATIONS:
-                    * **Mental Generals:** [e.g., "Anguish & Restlessness: Extreme mental restlessness; driven from place to place."]\n
-                    * **Physical Generals:** [e.g., "Prostration: Sudden, rapid sinking of vital forces; weakness disproportionate to illness."]\n
-                    * **Systemic Indications:**\n
-                    * **Gastrointestinal:** [e.g., "Stomach: Violent burning, vomiting immediately after eating."]\n
-                    * **Respiratory:** [e.g., "Asthma: Suffocative fits occurring after midnight (1 AM to 2 AM)."]\n
-                    * **Skin & Fever:** [e.g., "Skin: Dry, scaly, wrinkled; itching and burning worse from scratching."]\n
-
-                    ## IV. MODALITIES:
-                    * **Aggravation:** [e.g., "After midnight (1 AM to 3 AM), cold air, cold food/drinks, lying on back."]\n
-                    * **Amelioration:** [e.g., "Warmth in general, hot drinks, warm applications, sitting up, bending forward."]\n
-                    
-                    ## V. RELATIONS & COMPARISONS:
-                    * **Complementary:** [e.g., "Thuja, Carbo Veg"]
-                    * **Inimical:** [e.g., "Sepia"]
-                    * **Compare:** [e.g., "Rhus Tox (restlessness), Veratrum Album (coldness, collapse)"]\n
                 `;
-                finalResponseStructure += `**Profile** -> **Mnemonic** -> **Key Indications** -> **Modalities** -> **Relations**`;
+                finalResponseStructure = `JSON Array of objects {title, content}`;
                 break;
             case 'ANATOMY':
                 systemPrompt = `You are a medical professor. Generate notes for the given topic in Anatomy.
@@ -193,26 +166,34 @@ exports.generateNotes = async (req, res) => {
                 finalResponseStructure += `**Definition** -> **Pathogenesis** -> **Lab Diagnosis** -> **Clinical Correlation**`;
                 break;
             case 'ORGANON':
-                systemPrompt = `You are a medical professor. Generate notes for the given topic in Organon.
+                systemPrompt = `You are a medical professor. Generate notes for the given topic in Organon of Medicine.
                     # ${topic} - ${marks} Marks
 
-                    * Provide a comprehensive and well-structured professional medical note.
-                    * For Organon, include **Author Name** and **Year of Publishing/Edition** where applicable.
-                    * Strict Formatting: Only use Markdown Headings (e.g., #, ##), Bullet Points (e.g., *, -), and **Bold** text. Absolutely NO code blocks, NO JSON-like structures, and NO flowcharts or visual diagrams.
-                    * Do NOT include "Introduction" or "Conclusion" sections explicitly.
+                    Categorize the notes into: 1st Year, 2nd Year, 3rd Year, and 4th Year topics as applicable.
+                    Return ONLY a JSON array of objects. Each object must have: 
+                    "category": "1st Year" | "2nd Year" | "3rd Year" | "4th Year",
+                    "title": "Section Title",
+                    "content": "Markdown content for this section"
+
+                    Include **Author Name** and **Year of Publishing/Edition** where applicable.
+                    Strict Formatting: Use Markdown for content. NO code blocks, NO flowcharts.
                 `;
-                finalResponseStructure += `A structured professional medical template including Author and Year for Organon.`;
+                finalResponseStructure = `JSON Array of objects {category, title, content}`;
                 break;
             case 'REPERTORY':
                 systemPrompt = `You are a medical professor. Generate notes for the given topic in Repertory.
                     # ${topic} - ${marks} Marks
 
-                    * Provide a comprehensive and well-structured professional medical note.
-                    * For Repertory, include **Author Name** and **Year of Publishing/Edition** where applicable.
-                    * Strict Formatting: Only use Markdown Headings (e.g., #, ##), Bullet Points (e.g., *, -), and **Bold** text. Absolutely NO code blocks, NO JSON-like structures, and NO flowcharts or visual diagrams.
-                    * Do NOT include "Introduction" or "Conclusion" sections explicitly.
+                    Categorize the notes into: 2nd Year, 3rd Year, and 4th Year topics as applicable.
+                    Return ONLY a JSON array of objects. Each object must have: 
+                    "category": "2nd Year" | "3rd Year" | "4th Year",
+                    "title": "Section Title",
+                    "content": "Markdown content for this section"
+
+                    Include **Author Name** and **Year of Publishing/Edition** where applicable.
+                    Strict Formatting: Use Markdown for content. NO code blocks, NO flowcharts.
                 `;
-                finalResponseStructure += `A structured professional medical template including Author and Year for Repertory.`;
+                finalResponseStructure = `JSON Array of objects {category, title, content}`;
                 break;
             case 'PHARMACY':
                 systemPrompt = `You are a medical professor. Generate notes for the given topic in ${subject} using a structured professional medical template.
@@ -237,7 +218,7 @@ exports.generateNotes = async (req, res) => {
 
         let userPrompt = `Generate notes for "${topic}" on "${subject}" for ${marks} marks. The final response should be structured as follows: ${finalResponseStructure}.`;
 
-        console.log("3. Calling Gemini 2.0 Flash...");
+        console.log("3. Calling Gemini 2.5 Flash...");
         let text;
         let attempts = 0;
         while (attempts < MAX_RETRIES) {
@@ -245,6 +226,28 @@ exports.generateNotes = async (req, res) => {
                 const result = await model.generateContent([systemPrompt, userPrompt], { requestOptions: { timeout: 30000 } });
                 const response = await result.response;
                 text = response.text();
+
+                // Format JSON response to Markdown if applicable
+                if (['ORGANON', 'REPERTORY', 'MATERIAMEDICA'].includes(normalizedSubject)) {
+                    try {
+                        const jsonMatch = text.match(/\[[\s\S]*\]/);
+                        if (jsonMatch) {
+                            const data = JSON.parse(jsonMatch[0]);
+                            if (Array.isArray(data)) {
+                                let formattedText = "";
+                                data.forEach(item => {
+                                    if (item.category) formattedText += `### ${item.category}\n`;
+                                    if (item.title) formattedText += `## ${item.title}\n`;
+                                    if (item.content) formattedText += `${item.content}\n\n`;
+                                });
+                                text = formattedText;
+                            }
+                        }
+                    } catch (parseErr) {
+                        console.warn("AI returned invalid JSON, falling back to raw text:", parseErr.message);
+                    }
+                }
+                
                 break; // Exit loop on success
             } catch (aiError) {
                 console.error(`Gemini AI Notes Generation Attempt ${attempts + 1} Failed:`, aiError.message);
