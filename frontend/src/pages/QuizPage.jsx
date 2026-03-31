@@ -93,10 +93,11 @@ function QuizPage() {
         const unlockDate = weekInfo ? weekInfo.examDate : null;
         console.log('User Role:', user.role, 'Today:', new Date(), 'UnlockDate:', unlockDate);
 
-        // Hard-fix locking logic as requested
+        // Demo Exam Rule: Week 1 is ALWAYS unlocked for everyone
         let isLocked = false;
         const isAdmin = user.role === 'admin' || user.phone === '9493649788';
-        if (!isAdmin) {
+        
+        if (!isAdmin && weekNumber !== 1) {
           isLocked = unlockDate ? (new Date() < new Date(unlockDate)) : true;
         }
 
