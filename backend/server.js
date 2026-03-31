@@ -24,8 +24,22 @@ app.use((req, res, next) => {
 });
 
 // Middleware
+const allowedOrigins = [
+  'https://homeo-era-neo.vercel.app',
+  'https://homeo-era-neo-git-main-somasekhar944-creates-projects.vercel.app',
+  /https:\/\/homeo-era-neo.*\.vercel\.app$/
+];
+
 app.use(cors({
-  origin: [/https:\/\/homeo-era-neo.*\.vercel\.app$/, 'https://homeo-era-neo.vercel.app', 'https://homeo-era-neo-git-main-somasekhar944-creates-projects.vercel.app'],
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    const isAllowed = allowedOrigins.some(ao => {
+      if (ao instanceof RegExp) return ao.test(origin);
+      return ao === origin;
+    });
+    if (isAllowed) return callback(null, true);
+    return callback(new Error('CORS not allowed'), false);
+  },
   credentials: true
 }));
 app.use((req, res, next) => {
