@@ -199,11 +199,11 @@ function WeeklyAssessmentResult() {
                     </div>
                     <span className="text-[10px] font-black px-3 py-1 bg-white text-indigo-500 rounded-full border border-indigo-100 uppercase">{q.topic || 'General'}</span>
                   </div>
-                  <p className="font-bold text-gray-800 text-lg mb-6 leading-relaxed">{q.question}</p>
+                  <p className="font-bold text-gray-800 text-lg mb-6 leading-relaxed">{q.question || q.questionText || "Question text not found."}</p>
                   
                   <div className="space-y-3 mb-6">
                     <div className={`p-4 rounded-2xl text-sm font-bold border-2 ${q.isCorrect ? 'bg-green-100 border-green-500 text-green-900' : 'bg-white border-gray-100 text-gray-400'}`}>
-                      <span className="opacity-50 mr-2">Correct Answer:</span> {q.correctAnswer}
+                      <span className="opacity-50 mr-2">Correct Answer:</span> {q.correctAnswer || q.answer || "Answer not found"}
                     </div>
                     {q.userAnswer && !q.isCorrect && (
                       <div className="p-4 rounded-2xl text-sm font-bold border-2 bg-red-100 border-red-500 text-red-900">

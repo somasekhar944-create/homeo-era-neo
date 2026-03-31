@@ -413,7 +413,14 @@ router.get("/results/:examId", auth, async (req, res) => {
 
     const enhancedQuestions = result.questionsAttempted.map(attempt => {
       const fullQ = attempt.questionId;
-      return { ...attempt, questionId: fullQ ? fullQ._id : attempt.questionId, question: fullQ ? fullQ.question : "Question text not found.", options: fullQ ? fullQ.options : [], explanation: fullQ ? fullQ.explanation : "Explanation not found." };
+      return { 
+        ...attempt, 
+        questionId: fullQ ? fullQ._id : attempt.questionId, 
+        question: fullQ ? (fullQ.question || fullQ.questionText) : "Question text not found.", 
+        options: fullQ ? fullQ.options : [], 
+        explanation: fullQ ? fullQ.explanation : "Explanation not found.",
+        correctAnswer: fullQ ? (fullQ.answer || fullQ.correctAnswer) : attempt.correctAnswer
+      };
     });
     res.status(200).json({ ...result, questionsAttempted: enhancedQuestions });
   } catch (err) {

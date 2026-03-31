@@ -16,9 +16,11 @@ const previousYearQuestionSchema = new mongoose.Schema({
   id: { type: String },
   subject: { type: String },
   topic: { type: String },
-  question: { type: String, required: true },
+  question: { type: String },
+  questionText: { type: String }, // Support both
   options: [{ type: String, required: true }],
-  answer: { type: String, required: true },
+  answer: { type: String },
+  correctAnswer: { type: String }, // Support both
   source: { type: String },
   year: { type: String },
   explanation: { type: String },
