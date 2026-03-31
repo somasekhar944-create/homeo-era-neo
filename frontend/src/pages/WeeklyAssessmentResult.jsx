@@ -117,13 +117,19 @@ function WeeklyAssessmentResult() {
               <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-indigo-600 p-8 rounded-[40px] text-white shadow-xl shadow-indigo-100 flex flex-col justify-center relative overflow-hidden">
                   <div className="relative z-10">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-2">Total Score</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-2">Score Obtained</p>
                     <div className="flex items-baseline gap-2">
                       <p className="text-7xl font-black">{result.score}</p>
                       <p className="text-xl font-bold opacity-50">/ {result.totalQuestions * 4}</p>
                     </div>
                     <div className="mt-4 flex items-center gap-2 bg-white/10 w-fit px-3 py-1 rounded-full border border-white/10 backdrop-blur-md">
-                       <span className="text-[10px] font-black uppercase tracking-widest">{((result.score / (result.totalQuestions * 4)) * 100).toFixed(1)}% Percentage</span>
+                       <span className="text-[10px] font-black uppercase tracking-widest">{((result.score / (result.totalQuestions * 4)) * 100).toFixed(1)}% Accuracy</span>
+                    </div>
+                    <div className="mt-6 space-y-1 text-sm font-bold opacity-80">
+                      <p>Total Questions: {result.totalQuestions}</p>
+                      <p>Correct Answers: {result.correctAnswers}</p>
+                      <p>Wrong Answers: {result.wrongAnswers}</p>
+                      <p>Skipped/Unanswered: {result.unattempted}</p>
                     </div>
                   </div>
                   <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
@@ -132,7 +138,7 @@ function WeeklyAssessmentResult() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Rank</p>
-                    <p className="text-4xl font-black text-slate-900">#{result.rank || 'N/A'}</p>
+                    <p className="text-4xl font-black text-indigo-600">#{result.rank || 'N/A'}</p>
                     <p className="text-[10px] font-bold text-slate-400 mt-1">Among all users</p>
                   </div>
                   <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
@@ -153,13 +159,13 @@ function WeeklyAssessmentResult() {
 
               {/* Subject Strength Breakdown */}
               <div className="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl">
-                <h3 className="text-lg font-black italic mb-6 border-b border-white/10 pb-4">Subject Strength</h3>
+                <h3 className="text-lg font-black italic mb-6 border-b border-white/10 pb-4">Subject Strength Breakdown</h3>
                 <div className="space-y-5 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
                   {result.subjectAnalysis && result.subjectAnalysis.map((sub, idx) => (
                     <div key={idx} className="space-y-2">
                       <div className="flex justify-between items-end">
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{sub.subject}</p>
-                        <p className="text-xs font-black text-indigo-400">{sub.correct}/{sub.total}</p>
+                        <p className="text-xs font-black text-indigo-400">{sub.percentage.toFixed(0)}% Correct ({sub.correct}/{sub.total})</p>
                       </div>
                       <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                         <div 
