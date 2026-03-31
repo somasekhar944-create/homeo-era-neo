@@ -70,19 +70,24 @@ router.get("/exam/:weekNumber", auth, async (req, res) => {
       });
     }
 
-    // --- NEW: Static File Fallback for Week 1 (as per user request) ---
+    // --- NEW: Static File Fallback for Week 1 (Corrected Path) ---
     if (weekNumber === 1 && !isMonthlyMock) {
       console.log("Week 1 exam requested. Attempting to load static file...");
-      const staticExamPath = path.join(__dirname, "data/Week 1.json");
+      const staticExamPath = path.join(__dirname, "data/Previous Year Questions.json");
       if (fs.existsSync(staticExamPath)) {
-        const staticExamData = JSON.parse(fs.readFileSync(staticExamPath, "utf8"));
-        return res.status(200).json({
-          examQuestions: staticExamData,
-          isMonthlyMock: false,
-          totalQuestions: staticExamData.length,
-          timeLimit: 60,
-          weekNumber: 1
-        });
+        const fullData = JSON.parse(fs.readFileSync(staticExamPath, "utf8"));
+        // Filter for week 1 questions
+        const week1Qs = fullData.filter(q => q.id && q.id.startsWith("w1_")).slice(0, 50);
+        if (week1Qs.length > 0) {
+           console.log(`Found ${week1Qs.length} static questions for Week 1.`);
+           return res.status(200).json({
+             examQuestions: week1Qs,
+             isMonthlyMock: false,
+             totalQuestions: week1Qs.length,
+             timeLimit: 60,
+             weekNumber: 1
+           });
+        }
       }
     }
 

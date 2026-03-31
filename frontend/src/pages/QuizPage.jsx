@@ -149,32 +149,82 @@ function QuizPage() {
 
   const handleSubmit = async () => {
     if (isSubmitted) return;
-    // clearInterval(timerRef.current); // Timer removed
-
     setLoading(true);
 
-    // For the General AI Quiz, there's no submission to the backend, 
-    // as it's a client-side review. We'll just calculate the score locally.
-    let correctCount = 0;
-    const reviewData = questions.map((q, idx) => {
-      const userAnswer = userAnswers[idx];
-      const isCorrect = userAnswer === q.options[q.correctAnswer]; // Use correctAnswer index to get option text
-      if (isCorrect) correctCount++;
-      return {
-        ...q,
-        userAnswer,
-        isCorrect
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
       };
-    });
 
-    setResult({
-      score: correctCount,
-      total: questions.length,
-      percentage: (correctCount / questions.length) * 100,
-      reviewData
-    });
-    setIsSubmitted(true);
-    setLoading(false);
+      // 1. Calculate Results Locally
+      let correctCount = 0;
+      let wrongCount = 0;
+      let unattemptedCount = 0;
+
+      const reviewData = questions.map((q, idx) => {
+        const userAnswer = userAnswers[idx];
+        const isCorrect = userAnswer === q.options[q.correctAnswer] || userAnswer === q.answer;
+        
+        if (!userAnswer) unattemptedCount++;
+        else if (isCorrect) correctCount++;
+        else wrongCount++;
+
+        return {
+          ...q,
+          userAnswer,
+          isCorrect
+        };
+      });
+
+      const finalResult = {
+        score: (correctCount * 4) - (wrongCount * 1),
+        total: questions.length,
+        percentage: (correctCount / questions.length) * 100,
+        correctCount,
+        wrongCount,
+        unattemptedCount,
+        reviewData
+      };
+
+      // 2. Submit to Backend if it's a Weekly Training Exam
+      if (weekId) {
+        const weekNumber = parseInt(weekId.replace('week-', '')) || 1;
+        const submissionBody = {
+          weekNumber,
+          examType: weekNumber % 4 === 0 ? 'monthly' : 'weekly',
+          userAnswers: questions.map((q, idx) => ({
+            questionId: q._id,
+            answer: userAnswers[idx],
+            correctAnswer: q.options ? q.options[q.correctAnswer] : q.answer,
+            subject: q.subject,
+            topic: q.topic
+          })),
+          totalQuestions: questions.length,
+          timeTaken: 0 // Could add timer logic later if needed
+        };
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/training/submit-exam`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(submissionBody)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Submission failed:", errorData.message);
+        }
+      }
+
+      setResult(finalResult);
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error("Error during submission:", err);
+      setError("Failed to submit exam results.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFetchExplanation = async (questionId) => {
