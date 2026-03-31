@@ -194,16 +194,19 @@ function QuizPage() {
       let unattemptedCount = 0;
 
       const reviewData = questions.map((q, idx) => {
-        const userAnswer = userAnswers[idx];
-        const isCorrect = userAnswer === q.options[q.correctAnswer] || userAnswer === q.answer;
+        const userAnswer = userAnswers[idx] ? String(userAnswers[idx]).trim().toLowerCase() : null;
+        const correctText = (q.options && q.correctAnswer !== undefined) ? String(q.options[q.correctAnswer]) : (q.answer || q.correctAnswer);
+        const correctTextFormatted = String(correctText).trim().toLowerCase();
         
-        if (!userAnswer) unattemptedCount++;
+        const isCorrect = userAnswer === correctTextFormatted;
+        
+        if (!userAnswers[idx]) unattemptedCount++;
         else if (isCorrect) correctCount++;
         else wrongCount++;
 
         return {
           ...q,
-          userAnswer,
+          userAnswer: userAnswers[idx],
           isCorrect
         };
       });
@@ -227,7 +230,9 @@ function QuizPage() {
           userAnswers: questions.map((q, idx) => ({
             questionId: q._id,
             answer: userAnswers[idx],
-            correctAnswer: q.options ? q.options[q.correctAnswer] : q.answer,
+            correctAnswer: q.options ? q.options[q.correctAnswer] : (q.answer || q.correctAnswer),
+            questionText: q.question || q.questionText,
+            explanation: q.explanation,
             subject: q.subject,
             topic: q.topic
           })),

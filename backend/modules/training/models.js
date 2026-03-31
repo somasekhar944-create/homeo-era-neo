@@ -59,7 +59,9 @@ const examResultSchema = new mongoose.Schema({
     userAnswer: { type: String },
     correctAnswer: { type: String },
     isCorrect: { type: Boolean },
-    topic: { type: String }
+    topic: { type: String },
+    question: { type: String },
+    explanation: { type: String }
   }],
   submissionDate: { type: Date, default: Date.now },
 });

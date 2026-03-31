@@ -233,9 +233,21 @@ router.post("/submit-exam", auth, async (req, res) => {
 
     for (const ans of userAnswers) {
       let q = await PreviousYearQuestion.findById(ans.questionId);
-      if (!q) q = { answer: ans.correctAnswer, subject: ans.subject, topic: ans.topic };
+      // Important fallback for missing data
+      if (!q) {
+        q = { 
+          answer: ans.correctAnswer, 
+          question: ans.questionText || "Question text not found.",
+          subject: ans.subject, 
+          topic: ans.topic,
+          explanation: ans.explanation || "No explanation recorded."
+        };
+      }
       
-      const isCorrect = (ans.answer === q.answer);
+      const uAns = ans.answer ? String(ans.answer).trim().toLowerCase() : "";
+      const cAns = q.answer ? String(q.answer).trim().toLowerCase() : (q.correctAnswer ? String(q.correctAnswer).trim().toLowerCase() : "");
+      
+      const isCorrect = (uAns === cAns);
       if (ans.answer) { if (isCorrect) correct++; else wrong++; } else unattempted++;
       
       const sub = q.subject || "General";
@@ -246,9 +258,11 @@ router.post("/submit-exam", auth, async (req, res) => {
       questionsAttempted.push({
         questionId: ans.questionId,
         userAnswer: ans.answer,
-        correctAnswer: q.answer,
+        correctAnswer: q.answer || q.correctAnswer,
         isCorrect,
-        topic: q.topic
+        topic: q.topic,
+        question: q.question || q.questionText, // Preserve full data
+        explanation: q.explanation
       });
 
       if (mongoose.isValidObjectId(ans.questionId)) {
@@ -416,9 +430,9 @@ router.get("/results/:examId", auth, async (req, res) => {
       return { 
         ...attempt, 
         questionId: fullQ ? fullQ._id : attempt.questionId, 
-        question: fullQ ? (fullQ.question || fullQ.questionText) : "Question text not found.", 
-        options: fullQ ? fullQ.options : [], 
-        explanation: fullQ ? fullQ.explanation : "Explanation not found.",
+        question: fullQ ? (fullQ.question || fullQ.questionText) : (attempt.question || "Question text not found."), 
+        options: fullQ ? fullQ.options : (attempt.options || []), 
+        explanation: fullQ ? fullQ.explanation : (attempt.explanation || "Explanation not found."),
         correctAnswer: fullQ ? (fullQ.answer || fullQ.correctAnswer) : attempt.correctAnswer
       };
     });
