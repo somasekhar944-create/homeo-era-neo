@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
+const path = require("path");
 const { Syllabus, PreviousYearQuestion, ExamResult, GeneratedExam } = require("./models");
 const User = require("../../models/User");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -401,6 +403,13 @@ router.get("/results/:examId", auth, async (req, res) => {
     const query = { $or: [ { weekNumber: isNaN(weekNumber) ? -1 : weekNumber }, { _id: mongoose.isValidObjectId(examId) ? examId : new mongoose.Types.ObjectId() } ] };
     const result = await ExamResult.findOne(query).sort({ submissionDate: -1 }).populate("questionsAttempted.questionId").lean();
     if (!result) return res.status(404).json({ message: "No results found." });
+
+    // Calculate Rank (Strict Compare with other users)
+    const totalBetterScores = await ExamResult.countDocuments({ 
+      weekNumber: result.weekNumber, 
+      score: { $gt: result.score } 
+    });
+    const rank = totalBetterScores + 1;
 
     const enhancedQuestions = result.questionsAttempted.map(attempt => {
       const fullQ = attempt.questionId;

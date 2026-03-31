@@ -23,6 +23,8 @@ function QuizPage() {
   const [isAIQuiz, setIsAIQuiz] = useState(false);
   const [userRole, setUserRole] = useState('student');
   const [loadingExplanations, setLoadingExplanations] = useState({});
+  const [timeLeft, setTimeLeft] = useState(null);
+  const timerRef = useRef(null);
 
 
   // Initial load for Weekly Assessments if weekId exists
@@ -32,6 +34,29 @@ function QuizPage() {
       fetchWeeklyExam();
     }
   }, [weekId]);
+
+  // Timer Effect
+  useEffect(() => {
+    if (timeLeft !== null && timeLeft > 0 && !isSubmitted) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timerRef.current);
+            handleSubmit();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [timeLeft, isSubmitted]);
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
 
   const fetchUserRole = async () => {
     try {
@@ -87,7 +112,11 @@ function QuizPage() {
       const examData = await response.json();
       
       setQuestions(examData.examQuestions);
-      // setTimeLeft(examData.timeLimit * 60); // Timer removed
+      if (examData.timeLimit) {
+        setTimeLeft(examData.timeLimit * 60);
+      } else {
+        setTimeLeft(60 * 60); // Default to 60 mins if not provided
+      }
       setIsAIQuiz(false);
       setLoading(false);
     } catch (err) {
@@ -410,12 +439,18 @@ function QuizPage() {
   return (
     <div className="p-6 md:p-10 bg-slate-50 min-h-screen flex flex-col items-center">
       <div className="w-full max-w-4xl space-y-8">
-        {/* Header without Timer */}
-        <div className="flex flex-col items-center bg-white p-8 rounded-[40px] shadow-2xl border border-slate-100">
-          <div className="text-center">
-            <h2 className="text-2xl font-black text-slate-900">AI Quiz: {subject} - {topic}</h2>
+        {/* Header with Timer */}
+        <div className="flex flex-col md:flex-row justify-between items-center bg-white p-8 rounded-[40px] shadow-2xl border border-slate-100 gap-6">
+          <div className="text-center md:text-left">
+            <h2 className="text-2xl font-black text-slate-900">{weekId ? `Weekly Assessment: ${weekId}` : `AI Quiz: ${subject || 'Custom'}`}</h2>
             <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mt-1">{`Question ${currentQuestionIndex + 1} of ${questions.length}`}</p>
           </div>
+          {timeLeft !== null && (
+            <div className={`px-8 py-4 rounded-3xl border-2 flex flex-col items-center min-w-[160px] ${timeLeft < 300 ? 'bg-red-50 border-red-500 animate-pulse' : 'bg-indigo-50 border-indigo-200'}`}>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Time Remaining</p>
+              <p className={`text-3xl font-black ${timeLeft < 300 ? 'text-red-600' : 'text-indigo-600'}`}>{formatTime(timeLeft)}</p>
+            </div>
+          )}
         </div>
 
         {/* Question Card */}

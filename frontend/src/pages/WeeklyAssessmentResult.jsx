@@ -112,28 +112,66 @@ function WeeklyAssessmentResult() {
         
         {result ? (
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
-                <p className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-1">Final Score</p>
-                <p className="text-5xl font-black text-indigo-900">{result.score}</p>
-                <p className="text-xs font-bold text-indigo-500 mt-2">Marking: +4 for Correct, -1 for Wrong</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+              {/* Primary Score Analytics */}
+              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-indigo-600 p-8 rounded-[40px] text-white shadow-xl shadow-indigo-100 flex flex-col justify-center relative overflow-hidden">
+                  <div className="relative z-10">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-2">Total Score</p>
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-7xl font-black">{result.score}</p>
+                      <p className="text-xl font-bold opacity-50">/ {result.totalQuestions * 4}</p>
+                    </div>
+                    <div className="mt-4 flex items-center gap-2 bg-white/10 w-fit px-3 py-1 rounded-full border border-white/10 backdrop-blur-md">
+                       <span className="text-[10px] font-black uppercase tracking-widest">{((result.score / (result.totalQuestions * 4)) * 100).toFixed(1)}% Percentage</span>
+                    </div>
+                  </div>
+                  <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Rank</p>
+                    <p className="text-4xl font-black text-slate-900">#{result.rank || 'N/A'}</p>
+                    <p className="text-[10px] font-bold text-slate-400 mt-1">Among all users</p>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
+                    <p className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">Negative Marks</p>
+                    <p className="text-4xl font-black text-red-600">-{result.wrongAnswers * 1}</p>
+                    <p className="text-[10px] font-bold text-red-300 mt-1">Marks lost</p>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
+                    <p className="text-[10px] font-black text-green-400 uppercase tracking-widest mb-1">Correct</p>
+                    <p className="text-3xl font-black text-green-600">{result.correctAnswers}</p>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Accuracy</p>
+                    <p className="text-3xl font-black text-slate-800">{result.totalQuestions > 0 ? ((result.correctAnswers / (result.totalQuestions - result.unattempted)) * 100).toFixed(0) : 0}%</p>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1">Correct</p>
-                  <p className="text-2xl font-black text-green-600">{result.correctAnswers}</p>
-                </div>
-                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1">Wrong</p>
-                  <p className="text-2xl font-black text-red-600">{result.wrongAnswers}</p>
-                </div>
-                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1">Unattempted</p>
-                  <p className="text-2xl font-black text-gray-400">{result.unattempted}</p>
-                </div>
-                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1">Total</p>
-                  <p className="text-2xl font-black text-gray-800">{result.totalQuestions}</p>
+
+              {/* Subject Strength Breakdown */}
+              <div className="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl">
+                <h3 className="text-lg font-black italic mb-6 border-b border-white/10 pb-4">Subject Strength</h3>
+                <div className="space-y-5 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
+                  {result.subjectAnalysis && result.subjectAnalysis.map((sub, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="flex justify-between items-end">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{sub.subject}</p>
+                        <p className="text-xs font-black text-indigo-400">{sub.correct}/{sub.total}</p>
+                      </div>
+                      <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full transition-all duration-1000 ${sub.percentage >= 70 ? 'bg-green-500' : sub.percentage >= 40 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                          style={{ width: `${sub.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                  {(!result.subjectAnalysis || result.subjectAnalysis.length === 0) && (
+                    <p className="text-slate-500 text-xs italic">No subject data available.</p>
+                  )}
                 </div>
               </div>
             </div>
