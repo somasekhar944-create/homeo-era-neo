@@ -202,4 +202,14 @@ router.get("/explanation/:questionId", auth, async (req, res) => {
   } catch (err) { res.status(500).json({ message: "Error" }); }
 });
 
+// GET /api/training/syllabus
+router.get("/syllabus", async (req, res) => {
+  try {
+    const syllabus = await Syllabus.find({}).sort({ week: 1 });
+    res.status(200).json(syllabus);
+  } catch (err) {
+    res.status(500).json({ message: "Error" });
+  }
+});
+
 module.exports = router;
