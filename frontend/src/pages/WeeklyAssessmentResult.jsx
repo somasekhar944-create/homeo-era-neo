@@ -9,7 +9,7 @@ function WeeklyAssessmentResult() {
   const [error, setError] = useState(null);
   const [loadingExplanations, setLoadingExplanations] = useState({});
 
-  const handleAddToVault = async (questionId) => {
+  const handleAddToVault = async (q) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/vault/add`, {
@@ -18,7 +18,13 @@ function WeeklyAssessmentResult() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ questionId })
+        body: JSON.stringify({ 
+          question: q.question || q.questionText,
+          options: q.options,
+          correctAnswer: q.correctAnswer || q.answer,
+          explanation: q.explanation,
+          originalQuestionId: q.questionId
+        })
       });
       const data = await response.json();
       if (response.ok) {
@@ -191,7 +197,7 @@ function WeeklyAssessmentResult() {
                     <div className="flex gap-4 items-center">
                       <span className="text-[10px] font-black px-3 py-1 bg-white text-gray-500 rounded-full border border-gray-100 uppercase">Q{index + 1}</span>
                       <button 
-                        onClick={() => handleAddToVault(q.questionId)}
+                        onClick={() => handleAddToVault(q)}
                         className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-600 bg-white px-4 py-1 rounded-full border border-indigo-100 hover:bg-indigo-50 transition-all"
                       >
                         <FaArchive /> Add to Vault

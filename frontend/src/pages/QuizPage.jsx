@@ -194,19 +194,32 @@ function QuizPage() {
       let unattemptedCount = 0;
 
       const reviewData = questions.map((q, idx) => {
-        const userAnswer = userAnswers[idx] ? String(userAnswers[idx]).trim().toLowerCase() : null;
-        const correctText = (q.options && q.correctAnswer !== undefined) ? String(q.options[q.correctAnswer]) : (q.answer || q.correctAnswer);
-        const correctTextFormatted = String(correctText).trim().toLowerCase();
+        const rawUserAnswer = userAnswers[idx];
+        const userAnswer = rawUserAnswer ? String(rawUserAnswer).trim().toLowerCase() : null;
         
+        // Robust correct answer extraction
+        let correctText = "";
+        if (q.options && q.correctAnswer !== undefined && (typeof q.correctAnswer === 'number' || (!isNaN(q.correctAnswer) && q.correctAnswer !== ""))) {
+          const index = parseInt(q.correctAnswer, 10);
+          if (index >= 0 && index < q.options.length) {
+            correctText = q.options[index];
+          } else {
+            correctText = q.answer || q.correctAnswer;
+          }
+        } else {
+          correctText = q.answer || q.correctAnswer;
+        }
+        
+        const correctTextFormatted = String(correctText).trim().toLowerCase();
         const isCorrect = userAnswer === correctTextFormatted;
         
-        if (!userAnswers[idx]) unattemptedCount++;
+        if (!rawUserAnswer) unattemptedCount++;
         else if (isCorrect) correctCount++;
         else wrongCount++;
 
         return {
           ...q,
-          userAnswer: userAnswers[idx],
+          userAnswer: rawUserAnswer,
           isCorrect
         };
       });

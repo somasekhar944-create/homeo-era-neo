@@ -245,7 +245,20 @@ router.post("/submit-exam", auth, async (req, res) => {
       }
       
       const uAns = ans.answer ? String(ans.answer).trim().toLowerCase() : "";
-      const cAns = q.answer ? String(q.answer).trim().toLowerCase() : (q.correctAnswer ? String(q.correctAnswer).trim().toLowerCase() : "");
+      
+      // Handle potential index/text in answer or correctAnswer
+      let cAns = "";
+      if (q.options && q.correctAnswer !== undefined && (typeof q.correctAnswer === 'number' || (!isNaN(q.correctAnswer) && q.correctAnswer !== ""))) {
+          const index = parseInt(q.correctAnswer, 10);
+          if (index >= 0 && index < q.options.length) {
+              cAns = q.options[index];
+          } else {
+              cAns = q.answer || q.correctAnswer;
+          }
+      } else {
+          cAns = q.answer || q.correctAnswer;
+      }
+      cAns = String(cAns).trim().toLowerCase();
       
       const isCorrect = (uAns === cAns);
       if (ans.answer) { if (isCorrect) correct++; else wrong++; } else unattempted++;
