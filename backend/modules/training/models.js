@@ -55,7 +55,7 @@ const examResultSchema = new mongoose.Schema({
     percentage: { type: Number, default: 0 }
   }],
   questionsAttempted: [{
-    questionId: { type: mongoose.Schema.Types.ObjectId, ref: "PreviousYearQuestion" },
+    questionId: { type: mongoose.Schema.Types.Mixed }, // Support both ObjectId and String (e.g., w1_q1)
     userAnswer: { type: String },
     correctAnswer: { type: String },
     isCorrect: { type: Boolean },

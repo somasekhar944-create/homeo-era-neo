@@ -232,7 +232,13 @@ router.post("/submit-exam", auth, async (req, res) => {
     const subjectAnalysis = {};
 
     for (const ans of userAnswers) {
-      let q = await PreviousYearQuestion.findById(ans.questionId);
+      let q = null;
+      if (mongoose.isValidObjectId(ans.questionId)) {
+        q = await PreviousYearQuestion.findById(ans.questionId);
+      } else {
+        q = await PreviousYearQuestion.findOne({ id: ans.questionId });
+      }
+
       // Important fallback for missing data
       if (!q) {
         q = { 
@@ -282,6 +288,10 @@ router.post("/submit-exam", auth, async (req, res) => {
         await PreviousYearQuestion.findByIdAndUpdate(ans.questionId, {
           $addToSet: { usedBy: { userId: uid } }
         });
+      } else {
+        await PreviousYearQuestion.findOneAndUpdate({ id: ans.questionId }, {
+          $addToSet: { usedBy: { userId: uid } }
+        });
       }
     }
 
@@ -296,8 +306,10 @@ router.post("/submit-exam", auth, async (req, res) => {
     });
 
     await result.save();
+    console.log(`✅ Exam saved for user ${uid}, Week ${weekNumber}`);
     res.status(200).json({ message: "Success", result, leaderboard: await ExamResult.find({ weekNumber }).sort({ score: -1 }).limit(10) });
   } catch (err) {
+    console.error("❌ Submission Error:", err);
     res.status(500).json({ message: "Error", error: err.message });
   }
 });

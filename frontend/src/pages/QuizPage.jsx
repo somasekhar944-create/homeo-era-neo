@@ -241,9 +241,9 @@ function QuizPage() {
           weekNumber,
           examType: weekNumber % 4 === 0 ? 'monthly' : 'weekly',
           userAnswers: questions.map((q, idx) => ({
-            questionId: q._id,
+            questionId: q._id || q.id,
             answer: userAnswers[idx],
-            correctAnswer: q.options ? q.options[q.correctAnswer] : (q.answer || q.correctAnswer),
+            correctAnswer: q.options ? (typeof q.correctAnswer === 'number' ? q.options[q.correctAnswer] : (q.options[parseInt(q.correctAnswer)] || q.answer || q.correctAnswer)) : (q.answer || q.correctAnswer),
             questionText: q.question || q.questionText,
             explanation: q.explanation,
             subject: q.subject,

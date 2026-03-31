@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 // Middleware
 app.use(cors({
-  origin: 'https://homeo-era-neo.vercel.app',
+  origin: [/https:\/\/homeo-era-neo.*\.vercel\.app$/, 'https://homeo-era-neo.vercel.app', 'https://homeo-era-neo-git-main-somasekhar944-creates-projects.vercel.app'],
   credentials: true
 }));
 app.use((req, res, next) => {
