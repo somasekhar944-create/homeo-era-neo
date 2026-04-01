@@ -108,9 +108,11 @@ function RevisionVaultPage() {
 
   const handleRevAnswer = (option) => {
     const question = bookmarkedQuestions[currentRevIndex];
-    const isCorrect = option === question.answer;
-    setRevAnswers({ ...revAnswers, [currentRevIndex]: { selected: option, isCorrect } });
+    const userAnswer = String(option).trim().toLowerCase();
+    const correctAnswer = String(question.correctAnswer || question.answer).trim().toLowerCase();
+    const isCorrect = userAnswer === correctAnswer;
     
+    setRevAnswers({ ...revAnswers, [currentRevIndex]: { selected: option, isCorrect } });
     updateProgress(question._id, isCorrect);
   };
 
@@ -160,7 +162,7 @@ function RevisionVaultPage() {
             <div className="grid gap-3">
               {q.options.map((opt, idx) => {
                 const isSelected = answerData?.selected === opt;
-                const isCorrect = opt === q.answer;
+                const isCorrect = String(opt).trim().toLowerCase() === String(q.correctAnswer || q.answer).trim().toLowerCase();
                 let btnClass = "bg-white border-gray-100 text-gray-700 hover:border-amber-300";
                 
                 if (answerData) {

@@ -20,10 +20,10 @@ const RETRY_DELAY_MS = 1000;
 // POST /api/user/vault/add - Add a question to the user's vault
 router.post("/vault/add", auth, async (req, res) => {
   try {
-    const { question, options, correctAnswer, explanation, originalQuestionId } = req.body;
+    const { question, options, correctAnswer, explanation, originalQuestionId, subject, label } = req.body;
     const uid = req.user.id;
 
-    if (!question || !options || correctAnswer === undefined || !explanation) {
+    if (!question || !options || correctAnswer === undefined) {
       return res.status(400).json({ message: "Missing required question fields." });
     }
 
@@ -32,8 +32,10 @@ router.post("/vault/add", auth, async (req, res) => {
       question,
       options,
       correctAnswer,
-      explanation,
-      originalQuestionId: originalQuestionId || null
+      explanation: explanation || "No explanation provided.",
+      subject: subject || "General",
+      label: label || "Saved Question",
+      originalQuestionId: String(originalQuestionId || "") || null
     });
     await vaultEntry.save();
     res.status(201).json({ message: "Added to Vault successfully", vaultEntry });
@@ -51,13 +53,16 @@ router.get("/vault", auth, async (req, res) => {
     const userId = req.user.id;
     const vaultItems = await Vault.find({ userId }).sort({ addedAt: -1 });
     const bookmarkedData = vaultItems.map(item => ({
-      _id: item.originalQuestionId || item._id,
+      _id: item._id, // Use the actual vault ID for deletion
+      questionId: item.originalQuestionId,
       question: item.question,
       options: item.options,
       correctAnswer: item.correctAnswer,
       explanation: item.explanation,
+      subject: item.subject,
+      label: item.label,
       addedAt: item.addedAt,
-      vaultId: item._id
+      correctCount: item.correctCount || 0
     }));
     res.status(200).json(bookmarkedData);
   } catch (err) {

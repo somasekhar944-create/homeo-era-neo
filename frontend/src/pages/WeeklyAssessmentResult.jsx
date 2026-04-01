@@ -30,8 +30,13 @@ function WeeklyAssessmentResult() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ 
-          question: q.question, options: q.options, correctAnswer: q.correctAnswer, 
-          explanation: q.explanation, originalQuestionId: q.questionId 
+          question: q.question, 
+          options: q.options, 
+          correctAnswer: q.correctAnswer, 
+          explanation: q.explanation, 
+          originalQuestionId: q.questionId,
+          subject: q.subject || "General",
+          label: q.label || "Saved Question"
         })
       });
       alert("Added!");
